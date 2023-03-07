@@ -11,5 +11,6 @@ namespace RepositoriesLibrary
     public interface IRoomRepository : IGenericRepository<Room>
     {
         IEnumerable<Room> getAllList();
+        string getSide(int id);
     }
 }

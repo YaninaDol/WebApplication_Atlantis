@@ -14,10 +14,12 @@ namespace WebApplication_Atlantis.Controllers
     public class RoomControllerCrud : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICacheService _cacheService;
 
-        public RoomControllerCrud(IUnitOfWork unitOfWork)
+        public RoomControllerCrud(IUnitOfWork unitOfWork, ICacheService cacheService)
         {
             _unitOfWork = unitOfWork;
+            _cacheService = cacheService;
 
         }
 
@@ -25,17 +27,31 @@ namespace WebApplication_Atlantis.Controllers
      
         [HttpPost]
         [Route("Add")]
-
-        public IResult Add()
+     
+        public IResult Add(string Name, string Picture1, string Picture2, string Picture3, int Category, int Capacity, int Status, string Description, int Side, string Size, string Notice)
         {
-            //_context.Add(new Product() { Name = Name, Price = price, Image = image, CategoryId = categoryId });
-
-            //_context.SaveChanges();
-            //_cacheService.SetData("Product", _context.Products.ToList(), DateTimeOffset.Now.AddDays(1));
+            _unitOfWork.RoomRepository.Create(new Room() { Name = Name, Picture1 = Picture1, Picture2 = Picture2, Picture3 = Picture3,Category=Category,Capacity=Capacity,Status=Status,Description=Description,Side=Side,Views= _unitOfWork.RoomRepository.getSide(Side), Size=Size,Notice=Notice });
+            _unitOfWork.Commit();
+           
+            _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
             return Results.Ok();
 
 
         }
+        [HttpPost]
+        [Route("Delete")]
+
+        public IResult Delete(int Id)
+        {
+            _unitOfWork.RoomRepository.Delete(Id);
+            _unitOfWork.Commit();
+
+            _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
+            return Results.Ok();
+
+
+        }
+
 
 
     }

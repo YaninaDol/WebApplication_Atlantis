@@ -17,5 +17,10 @@ namespace DataAccess
             return db.Rooms.ToList();
 
         }
+
+        public string getSide(int id)
+        {
+           return  db.RoomSides.ToList().Where(x => x.Id == id).FirstOrDefault().Name;
+        }
     }
 }
