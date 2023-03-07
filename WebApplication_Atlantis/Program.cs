@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RepositoriesLibrary;
 using RepositoriesLibrary.Interfaces;
+using WebApplication_Atlantis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +53,9 @@ options.UseSqlServer(
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<Atlantis20DbContext>()
     .AddDefaultTokenProviders();
-
+//cashe
+builder.Services.AddScoped<ICacheService, CacheService>();
+//..
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

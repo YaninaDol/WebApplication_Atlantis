@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace WebApplication_Atlantis.Migrations
 {
     [DbContext(typeof(Atlantis20DbContext))]
-    [Migration("20230225170705_m1")]
-    partial class m1
+    [Migration("20230227173501_azure1")]
+    partial class azure1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -12,7 +12,7 @@ using System.Security.Cryptography.X509Certificates;
 using RepositoriesLibrary.Models;
 
 
-namespace MyApplicationAPI.Controllers
+namespace WebApplication_Atlantis.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/")]
@@ -112,8 +112,8 @@ namespace MyApplicationAPI.Controllers
             if(await _roleManager.RoleExistsAsync(UserRoles.Admin))
                 await _userManager.AddToRoleAsync(user, UserRoles.Admin);
             // доступны методы и пользователей
-            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
-                await _userManager.AddToRoleAsync(user, UserRoles.User);
+            //if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            //    await _userManager.AddToRoleAsync(user, UserRoles.User);
 
             return Ok("Admin added!");
         }

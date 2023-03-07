@@ -1,5 +1,5 @@
 ﻿using DataAccess.Data;
-using RepositoriesLibrary.Interfaces;
+using RepositoriesLibrary;
 using RepositoriesLibrary.Models;
 
 namespace DataAccess
@@ -8,6 +8,13 @@ namespace DataAccess
     {
         public RoomRepository(Atlantis20DbContext context) : base(context)
         {
+           
+        }
+
+
+        public IEnumerable<Room> getAllList()
+        {
+            return db.Rooms.ToList();
 
         }
     }

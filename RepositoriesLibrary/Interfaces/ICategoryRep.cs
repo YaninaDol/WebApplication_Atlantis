@@ -10,6 +10,7 @@ namespace RepositoriesLibrary
 {
     public interface ICategoryRep:IGenericRepository<Category>
     {
-       
+        bool DeleteCategory(int Id);
+
     }
 }

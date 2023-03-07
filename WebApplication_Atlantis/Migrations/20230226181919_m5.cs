@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApplication_Atlantis.Migrations
 {
     /// <inheritdoc />
-    public partial class m1 : Migration
+    public partial class m5 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,7 +50,82 @@ namespace WebApplication_Atlantis.Migrations
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
-        
+            migrationBuilder.CreateTable(
+                name: "BookingInfos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateFisrt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateLast = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RoomNumber = table.Column<int>(type: "int", nullable: true),
+                    TotalDays = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookingInfos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BedTypes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ListBookDates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoomNumber = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ListBookDates", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoomSides",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoomSides", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoomStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoomStatuses", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
@@ -158,7 +233,48 @@ namespace WebApplication_Atlantis.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-        
+            migrationBuilder.CreateTable(
+                name: "Rooms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Picture1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Picture2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Picture3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<int>(type: "int", nullable: true),
+                    Capacity = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Side = table.Column<int>(type: "int", nullable: true),
+                    Views = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Notice = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryNavigationId = table.Column<int>(type: "int", nullable: true),
+                    SideNavigationId = table.Column<int>(type: "int", nullable: true),
+                    StatusNavigationId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rooms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rooms_Categories_CategoryNavigationId",
+                        column: x => x.CategoryNavigationId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Rooms_RoomSides_SideNavigationId",
+                        column: x => x.SideNavigationId,
+                        principalTable: "RoomSides",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Rooms_RoomStatuses_StatusNavigationId",
+                        column: x => x.StatusNavigationId,
+                        principalTable: "RoomStatuses",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -198,13 +314,63 @@ namespace WebApplication_Atlantis.Migrations
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-      
+            migrationBuilder.CreateIndex(
+                name: "IX_Rooms_CategoryNavigationId",
+                table: "Rooms",
+                column: "CategoryNavigationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rooms_SideNavigationId",
+                table: "Rooms",
+                column: "SideNavigationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rooms_StatusNavigationId",
+                table: "Rooms",
+                column: "StatusNavigationId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-        
+            migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "BookingInfos");
+
+            migrationBuilder.DropTable(
+                name: "ListBookDates");
+
+            migrationBuilder.DropTable(
+                name: "Rooms");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "RoomSides");
+
+            migrationBuilder.DropTable(
+                name: "RoomStatuses");
         }
     }
 }
