@@ -14,5 +14,7 @@ namespace RepositoriesLibrary
         string getSide(int id);
 
         bool Update(int IdUpdate, Room item);
+
+        IEnumerable<Room> Availability(DateTime Start, DateTime End,  int Adults, int Children);
     }
 }

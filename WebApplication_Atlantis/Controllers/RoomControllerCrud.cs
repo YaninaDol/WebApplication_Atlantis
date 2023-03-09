@@ -55,14 +55,28 @@ namespace WebApplication_Atlantis.Controllers
         [HttpPost]
         [Route("Update")]
 
-        public IResult Update(int Id, string Name, string Picture1, string Picture2, string Picture3, int Category, int Capacity, int Status, string Description, int Side, string Size, string Notice)
+        public IResult Update([FromForm] int Id, [FromForm] string Name, [FromForm] string Picture1, [FromForm] string Picture2, [FromForm] string Picture3, [FromForm] int Category, [FromForm] int Capacity, [FromForm] int Status, [FromForm] string Description, [FromForm] int Side, [FromForm] string Size, [FromForm] string Notice)
         {
-           // _unitOfWork.RoomRepository.UpdateProduct(Id);
-            _unitOfWork.Commit();
 
-            _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
-            return Results.Ok();
+            if (_unitOfWork.RoomRepository.Update(Id, new Room() { Name = Name, Picture1 = Picture1, Picture2 = Picture2, Picture3 = Picture3, Category = Category, Capacity = Capacity, Status = Status, Description = Description, Side = Side, Size = Size, Notice = Notice }))
+            {
+                _unitOfWork.Commit();
 
+                _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
+                return Results.Ok();
+            }
+            else return Results.BadRequest();
+
+
+        }
+
+        [HttpPost]
+        [Route("Availability")]
+
+        public async Task<ActionResult<IEnumerable<Room>>> Availability([FromForm] DateTime Start, [FromForm] DateTime End, [FromForm] int Adults, [FromForm] int Children)
+        {
+
+           return _unitOfWork.RoomRepository.Availability(Start, End, Adults, Children).ToList();
 
         }
 

@@ -51,5 +51,45 @@ namespace DataAccess
             else return false;
 
         }
+
+        public IEnumerable<Room> Availability(DateTime Start, DateTime End, int Adults, int Children)
+        {
+            List <Room> availability= new List <Room>();
+
+            foreach (var item in db.Categories.ToList())
+            {
+                Room select = db.Rooms.Where(x =>x.Category==item.Id&& x.Capacity >= (Adults + Children)).FirstOrDefault();
+                if(checkAvailability(Start,End,select.Id))
+                {
+                    availability.Add(select);
+                }
+            }
+
+            return availability;
+
+           
+
+        }
+        public bool checkAvailability(DateTime Start, DateTime End,int roomnumber)
+
+        {
+            int f = 0;
+            
+            for (var day = Start; day.Date < End; day = day.AddDays(1))
+
+            {
+
+                if(db.ListBookDates.Any(x=>x.Date.Equals(day) && x.RoomNumber.Equals(roomnumber)))
+                 {
+                    f = 1;
+                    return false;
+                }
+
+            }
+
+            return true;
+        }
+
+
     }
 }
