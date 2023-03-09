@@ -80,6 +80,21 @@ namespace WebApplication_Atlantis.Controllers
 
         }
 
+        [HttpPost]
+        [Route("Booking")]
+
+        public IResult Booking([FromForm] int roomNumber, [FromForm] string Userid, [FromForm] DateTime Start, [FromForm] DateTime End, [FromForm] string phoneNumber, [FromForm] string notice)
+        {
+
+            if (_unitOfWork.RoomRepository.booking(roomNumber, Userid, Start, End, phoneNumber, notice))
+            {
+                _unitOfWork.Commit();
+                return Results.Ok();
+            }
+            else return Results.BadRequest();
+
+        }
+
 
 
     }

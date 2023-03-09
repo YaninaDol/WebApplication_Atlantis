@@ -8,7 +8,7 @@ namespace DataAccess
     {
         public RoomRepository(Atlantis20DbContext context) : base(context)
         {
-           
+
         }
 
 
@@ -26,12 +26,12 @@ namespace DataAccess
                 return "Null";
         }
 
-        public bool Update(int IdUpdate,Room item)
+        public bool Update(int IdUpdate, Room item)
         {
-            if(db.Rooms.Any(x => x.Id.Equals(IdUpdate)) )
-            
+            if (db.Rooms.Any(x => x.Id.Equals(IdUpdate)))
+
             {
-                
+
                 db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Name = item.Name;
                 db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Picture1 = item.Picture1;
                 db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Picture2 = item.Picture2;
@@ -41,7 +41,7 @@ namespace DataAccess
                 db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Status = item.Status;
                 db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Description = item.Description;
                 db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Side = item.Side;
-                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Views = getSide(Convert.ToInt32( item.Side));
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Views = getSide(Convert.ToInt32(item.Side));
                 db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Size = item.Size;
                 db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Notice = item.Notice;
 
@@ -54,12 +54,12 @@ namespace DataAccess
 
         public IEnumerable<Room> Availability(DateTime Start, DateTime End, int Adults, int Children)
         {
-            List <Room> availability= new List <Room>();
+            List<Room> availability = new List<Room>();
 
             foreach (var item in db.Categories.ToList())
             {
-                Room select = db.Rooms.Where(x =>x.Category==item.Id&& x.Capacity >= (Adults + Children)).FirstOrDefault();
-                if(checkAvailability(Start,End,select.Id))
+                Room select = db.Rooms.Where(x => x.Category == item.Id && x.Capacity >= (Adults + Children)).FirstOrDefault();
+                if (checkAvailability(Start, End, select.Id))
                 {
                     availability.Add(select);
                 }
@@ -67,20 +67,20 @@ namespace DataAccess
 
             return availability;
 
-           
+
 
         }
-        public bool checkAvailability(DateTime Start, DateTime End,int roomnumber)
+        public bool checkAvailability(DateTime Start, DateTime End, int roomnumber)
 
         {
             int f = 0;
-            
+
             for (var day = Start; day.Date < End; day = day.AddDays(1))
 
             {
 
-                if(db.ListBookDates.Any(x=>x.Date.Equals(day) && x.RoomNumber.Equals(roomnumber)))
-                 {
+                if (db.ListBookDates.Any(x => x.Date.Equals(day.Date) && x.RoomNumber.Equals(roomnumber)))
+                {
                     f = 1;
                     return false;
                 }
@@ -88,6 +88,28 @@ namespace DataAccess
             }
 
             return true;
+        }
+
+        public bool booking(int roomNumber, string Userid, DateTime Start, DateTime End, string phoneNumber, string notice)
+        {
+            if (checkAvailability(Start, End, roomNumber))
+            {
+                db.BookingInfos.Add(new BookingInfo() { DateFisrt = Start, DateLast = End, TotalDays = Start.Subtract(End).Days, UserId = Userid, RoomNumber = roomNumber, PhoneNumber = phoneNumber, Notes = notice, Status = "new" });
+
+                for (var day = Start; day.Date < End; day = day.AddDays(1))
+
+                {
+
+                    db.ListBookDates.Add(new ListBookDate() { RoomNumber=roomNumber,Date=day.Date});
+                   
+
+                }
+
+                return true;
+            }
+            else return false;
+
+
         }
 
 

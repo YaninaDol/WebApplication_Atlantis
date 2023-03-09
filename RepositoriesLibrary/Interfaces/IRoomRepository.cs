@@ -16,5 +16,8 @@ namespace RepositoriesLibrary
         bool Update(int IdUpdate, Room item);
 
         IEnumerable<Room> Availability(DateTime Start, DateTime End,  int Adults, int Children);
+
+        bool booking (int roomNumber,string Userid, DateTime Start, DateTime End,string phoneNumber,string notice);
+
     }
 }
