@@ -20,7 +20,36 @@ namespace DataAccess
 
         public string getSide(int id)
         {
-           return  db.RoomSides.ToList().Where(x => x.Id == id).FirstOrDefault().Name;
+            if (db.RoomSides.Any(x => x.Id.Equals(id)))
+                return db.RoomSides.ToList().Where(x => x.Id == id).FirstOrDefault().Name;
+            else
+                return "Null";
+        }
+
+        public bool Update(int IdUpdate,Room item)
+        {
+            if(db.Rooms.Any(x => x.Id.Equals(IdUpdate)) )
+            
+            {
+                
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Name = item.Name;
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Picture1 = item.Picture1;
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Picture2 = item.Picture2;
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Picture3 = item.Picture3;
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Category = item.Category;
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Capacity = item.Capacity;
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Status = item.Status;
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Description = item.Description;
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Side = item.Side;
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Views = getSide(Convert.ToInt32( item.Side));
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Size = item.Size;
+                db.Rooms.Where(x => x.Id == IdUpdate).FirstOrDefault().Notice = item.Notice;
+
+                return true;
+
+            }
+            else return false;
+
         }
     }
 }

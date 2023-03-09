@@ -12,5 +12,7 @@ namespace RepositoriesLibrary
     {
         IEnumerable<Room> getAllList();
         string getSide(int id);
+
+        bool Update(int IdUpdate, Room item);
     }
 }

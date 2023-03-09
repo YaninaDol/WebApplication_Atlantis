@@ -52,6 +52,20 @@ namespace WebApplication_Atlantis.Controllers
 
         }
 
+        [HttpPost]
+        [Route("Update")]
+
+        public IResult Update(int Id, string Name, string Picture1, string Picture2, string Picture3, int Category, int Capacity, int Status, string Description, int Side, string Size, string Notice)
+        {
+           // _unitOfWork.RoomRepository.UpdateProduct(Id);
+            _unitOfWork.Commit();
+
+            _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
+            return Results.Ok();
+
+
+        }
+
 
 
     }
