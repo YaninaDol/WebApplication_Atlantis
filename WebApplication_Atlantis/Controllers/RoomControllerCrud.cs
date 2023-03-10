@@ -81,9 +81,9 @@ namespace WebApplication_Atlantis.Controllers
         }
 
         [HttpPost]
-        [Route("Booking")]
+        [Route("Book")]
 
-        public IResult Booking([FromForm] int roomNumber, [FromForm] string Userid, [FromForm] DateTime Start, [FromForm] DateTime End, [FromForm] string phoneNumber, [FromForm] string notice)
+        public IResult Book([FromForm] int roomNumber, [FromForm] string Userid, [FromForm] DateTime Start, [FromForm] DateTime End, [FromForm] string phoneNumber, [FromForm] string notice)
         {
 
             if (_unitOfWork.RoomRepository.booking(roomNumber, Userid, Start, End, phoneNumber, notice))
