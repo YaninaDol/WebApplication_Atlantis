@@ -54,16 +54,23 @@ namespace DataAccess
 
         public IEnumerable<Room> Availability(DateTime Start, DateTime End, int Adults, int Children)
         {
+            
             List<Room> availability = new List<Room>();
-
-            foreach (var item in db.Categories.ToList())
+            foreach (var sides in db.RoomSides.ToList())
             {
-                Room select = db.Rooms.Where(x => x.Category == item.Id && x.Capacity >= (Adults + Children)).FirstOrDefault();
-                if (checkAvailability(Start, End, select.Id))
+                foreach (var item in db.Categories.ToList())
                 {
-                    availability.Add(select);
+                    Room select = db.Rooms.Where(x => x.Category == item.Id &&x.Side==sides.Id && x.Capacity >= (Adults + Children)&& x.Status!=3).FirstOrDefault();
+                    if(select!=null)
+                    { 
+                    if (checkAvailability(Start, End, select.Id))
+                    {
+                        availability.Add(select);
+                    }
+                    }
                 }
             }
+          
 
             return availability;
 
@@ -73,34 +80,38 @@ namespace DataAccess
         public bool checkAvailability(DateTime Start, DateTime End, int roomnumber)
 
         {
-            int f = 0;
-
-            for (var day = Start; day.Date < End; day = day.AddDays(1))
-
+           
+            if (Start.Day >= DateTime.Now.Day & Start.Month >= DateTime.Now.Month&&Start.Year >= DateTime.Now.Year &&
+                End.Day > DateTime.Now.Day & End.Month >= DateTime.Now.Month && End.Year >= DateTime.Now.Year)
             {
+                for (var day = Start; day.Date < End; day = day.AddDays(1))
 
-                if (db.ListBookDates.Any(x => x.Date.Equals(day.Date) && x.RoomNumber.Equals(roomnumber)))
                 {
-                    f = 1;
-                    return false;
+
+                    if (db.ListBookDates.Any(x => x.Date.Equals(day.Date) && x.RoomNumber.Equals(roomnumber)))
+                    {
+                       
+                        return false;
+                    }
+
                 }
 
+                return true;
             }
-
-            return true;
+            else return false;
         }
 
-        public bool booking(int roomNumber, string Userid, DateTime Start, DateTime End, string phoneNumber, string notice)
+        public bool booking(int roomNumber, string userID, DateTime Start, DateTime End, string phoneNumber, string notice)
         {
             if (checkAvailability(Start, End, roomNumber))
             {
-                db.BookingInfos.Add(new BookingInfo() { DateFisrt = Start, DateLast = End, TotalDays = Start.Subtract(End).Days, UserId = Userid, RoomNumber = roomNumber, PhoneNumber = phoneNumber, Notes = notice, Status = "new" });
+                db.BookingInfos.Add(new BookingInfo() { DateFisrt = Start, DateLast = End, TotalDays = End.Subtract(Start).Days, UserId = userID, RoomNumber = roomNumber, PhoneNumber = phoneNumber, Notes = notice, Status = "new" });
 
                 for (var day = Start; day.Date < End; day = day.AddDays(1))
 
                 {
 
-                    db.ListBookDates.Add(new ListBookDate() { RoomNumber=roomNumber,Date=day.Date});
+                    db.ListBookDates.Add(new ListBookDate() { RoomNumber=roomNumber,UserId=userID, Date=day.Date});
                    
 
                 }
