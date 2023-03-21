@@ -73,10 +73,16 @@ namespace WebApplication_Atlantis.Controllers
         [HttpPost]
         [Route("Availability")]
 
-        public async Task<ActionResult<IEnumerable<Room>>> Availability([FromForm] DateTime Start, [FromForm] DateTime End, [FromForm] int Adults, [FromForm] int Children)
+        public async Task<ActionResult<IEnumerable<Room>>> Availability([FromForm] string Start, [FromForm] string End, [FromForm] int Adults, [FromForm] int Children)
         {
+            string[] str= Start.ToString().Split('-');
 
-           return _unitOfWork.RoomRepository.Availability(Start, End, Adults, Children).ToList();
+            DateTime startday = new DateTime(Convert.ToInt32(str[0]), Convert.ToInt32(str[1]), Convert.ToInt32(str[2]));
+            string[] str2 = End.ToString().Split('-');
+
+            DateTime endday = new DateTime(Convert.ToInt32(str2[0]), Convert.ToInt32(str2[1]), Convert.ToInt32(str2[2]));
+
+            return _unitOfWork.RoomRepository.Availability(startday, endday, Adults, Children).ToList();
 
         }
 

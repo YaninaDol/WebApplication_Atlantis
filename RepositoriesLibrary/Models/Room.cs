@@ -30,7 +30,7 @@ public partial class Room
     public string? Size { get; set; }
 
     public string? Notice { get; set; }
-
+    public int? Price { get; set; }
     public virtual Category? CategoryNavigation { get; set; }
 
     public virtual RoomSide? SideNavigation { get; set; }
