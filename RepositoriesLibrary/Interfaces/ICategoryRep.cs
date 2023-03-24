@@ -12,5 +12,7 @@ namespace RepositoriesLibrary
     {
         bool DeleteCategory(int Id);
 
+        List<RoomSide> getRoomSides();
+
     }
 }

@@ -89,10 +89,18 @@ namespace WebApplication_Atlantis.Controllers
         [HttpPost]
         [Route("Book")]
 
-        public IResult Book([FromForm] int roomNumber, [FromForm] string Userid, [FromForm] DateTime Start, [FromForm] DateTime End, [FromForm] string phoneNumber, [FromForm] string notice)
+        public IResult Book([FromForm] int roomNumber, [FromForm] string Userid, [FromForm] string Start, [FromForm] string End, [FromForm] string phoneNumber, [FromForm] string notice)
         {
 
-            if (_unitOfWork.RoomRepository.booking(roomNumber, Userid, Start, End, phoneNumber, notice))
+            string[] str = Start.ToString().Split('-');
+
+            DateTime startday = new DateTime(Convert.ToInt32(str[0]), Convert.ToInt32(str[1]), Convert.ToInt32(str[2]));
+            string[] str2 = End.ToString().Split('-');
+
+            DateTime endday = new DateTime(Convert.ToInt32(str2[0]), Convert.ToInt32(str2[1]), Convert.ToInt32(str2[2]));
+
+
+            if (_unitOfWork.RoomRepository.booking(roomNumber, Userid, startday, endday, phoneNumber, notice))
             {
                 _unitOfWork.Commit();
                 return Results.Ok();

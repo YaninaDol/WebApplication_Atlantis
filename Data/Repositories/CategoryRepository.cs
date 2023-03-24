@@ -27,5 +27,7 @@ namespace DataAccess
 
             return false;
         }
+
+        public List<RoomSide> getRoomSides()=>db.RoomSides.ToList();
     }
 }

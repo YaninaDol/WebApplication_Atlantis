@@ -87,6 +87,18 @@ namespace WebApplication_Atlantis.Controllers
             catch (Exception ex) { return BadRequest(ex.Message); }
 
         }
+        [HttpGet]
+        [Route("GetSides")]
+
+        public async Task<ActionResult<IEnumerable<RoomSide>>> GetSides()
+        {
+            try
+            {
+                return _unitOfWork.CategoryRep.getRoomSides().ToList();
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
+
+        }
 
     }
 }
