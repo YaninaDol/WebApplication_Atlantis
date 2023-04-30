@@ -17,7 +17,7 @@ namespace RepositoriesLibrary
 
         IEnumerable<Room> Availability(DateTime Start, DateTime End,  int Adults, int Children);
 
-        bool booking (int roomNumber,string Userid, DateTime Start, DateTime End,string phoneNumber,string notice);
+        bool booking (int roomNumber,string Userid, string FirstName, int totaldays, string LastName, DateTime Start, DateTime End,string phoneNumber,string notice);
 
     }
 }

@@ -80,17 +80,18 @@ namespace DataAccess
         public bool checkAvailability(DateTime Start, DateTime End, int roomnumber)
 
         {
-           
-            if (Start.Day >= DateTime.Now.Day & Start.Month >= DateTime.Now.Month&&Start.Year >= DateTime.Now.Year &&
-                End.Day > DateTime.Now.Day & End.Month >= DateTime.Now.Month && End.Year >= DateTime.Now.Year)
-            {
+            var time = Start.Subtract(DateTime.Now);
+
+            if (Math.Abs(time.Days)>1|| Math.Abs(time.Hours)>=1)
+
+                {
                 for (var day = Start; day.Date < End; day = day.AddDays(1))
 
                 {
 
                     if (db.ListBookDates.Any(x => x.Date.Equals(day.Date) && x.RoomNumber.Equals(roomnumber)))
                     {
-                       
+
                         return false;
                     }
 
@@ -98,14 +99,18 @@ namespace DataAccess
 
                 return true;
             }
-            else return false;
+
+
+
+                else return false;
+           
         }
 
-        public bool booking(int roomNumber, string userID, DateTime Start, DateTime End, string phoneNumber, string notice)
+        public bool booking(int roomNumber, string userID, string FirstName,int totaldays, string LastName, DateTime Start, DateTime End, string phoneNumber, string notice)
         {
             if (checkAvailability(Start, End, roomNumber))
             {
-                db.BookingInfos.Add(new BookingInfo() { DateFisrt = Start, DateLast = End, TotalDays = End.Subtract(Start).Days, UserId = userID, RoomNumber = roomNumber, PhoneNumber = phoneNumber, Notes = notice, Status = "new" });
+                db.BookingInfos.Add(new BookingInfo() { DateFisrt = Start, DateLast = End, TotalDays = totaldays, FirstName=FirstName,LastName=LastName, UserId = userID, RoomNumber = roomNumber, PhoneNumber = phoneNumber, Notes = notice, Status = "new" });
 
                 for (var day = Start; day.Date < End; day = day.AddDays(1))
 

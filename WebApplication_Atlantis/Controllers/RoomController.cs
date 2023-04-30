@@ -14,12 +14,12 @@ namespace WebApplication_Atlantis.Controllers
     public class RoomController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICacheService _cacheService;
+      //  private readonly ICacheService _cacheService;
 
-        public RoomController(IUnitOfWork unitOfWork, ICacheService cacheService)
+        public RoomController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _cacheService = cacheService;
+           // _cacheService = cacheService;
         }
 
 
@@ -30,22 +30,22 @@ namespace WebApplication_Atlantis.Controllers
 
           
 
-            List<Room> roomsCache = _cacheService.GetData<List<Room>>("Rooms");
-            if (roomsCache == null)
-            {
-                var roomsSQL =  _unitOfWork.RoomRepository.getAllList().ToList();
-                if (roomsSQL.Count > 0)
-                {
-                    roomsCache = roomsSQL;
-                    _cacheService.SetData("Rooms", roomsSQL, DateTimeOffset.Now.AddDays(1));
+            //List<Room> roomsCache = _cacheService.GetData<List<Room>>("Rooms");
+            //if (roomsCache == null)
+            //{
+            //    var roomsSQL =  _unitOfWork.RoomRepository.getAllList().ToList();
+            //    if (roomsSQL.Count > 0)
+            //    {
+            //        roomsCache = roomsSQL;
+            //        _cacheService.SetData("Rooms", roomsSQL, DateTimeOffset.Now.AddDays(1));
 
 
 
-                }
-            }
+            //    }
+            //}
 
 
-            return roomsCache;
+            return _unitOfWork.RoomRepository.GetAll().ToList();
 
         }
 

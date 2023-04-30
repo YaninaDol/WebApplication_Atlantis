@@ -14,12 +14,12 @@ namespace WebApplication_Atlantis.Controllers
     public class RoomControllerCrud : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICacheService _cacheService;
+        //private readonly ICacheService _cacheService;
 
-        public RoomControllerCrud(IUnitOfWork unitOfWork, ICacheService cacheService)
+        public RoomControllerCrud(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _cacheService = cacheService;
+          //  _cacheService = cacheService;
 
         }
 
@@ -33,7 +33,7 @@ namespace WebApplication_Atlantis.Controllers
             _unitOfWork.RoomRepository.Create(new Room() { Name = Name, Picture1 = Picture1, Picture2 = Picture2, Picture3 = Picture3,Category=Category,Capacity=Capacity,Status=Status,Description=Description,Side=Side,Views= _unitOfWork.RoomRepository.getSide(Side), Size=Size,Notice=Notice });
             _unitOfWork.Commit();
            
-            _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
+          //  _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
             return Results.Ok();
 
 
@@ -46,7 +46,7 @@ namespace WebApplication_Atlantis.Controllers
             _unitOfWork.RoomRepository.Delete(Id);
             _unitOfWork.Commit();
 
-            _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
+          //  _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
             return Results.Ok();
 
 
@@ -62,7 +62,7 @@ namespace WebApplication_Atlantis.Controllers
             {
                 _unitOfWork.Commit();
 
-                _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
+              //  _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
                 return Results.Ok();
             }
             else return Results.BadRequest();
@@ -89,7 +89,7 @@ namespace WebApplication_Atlantis.Controllers
         [HttpPost]
         [Route("Book")]
 
-        public IResult Book([FromForm] int roomNumber, [FromForm] string Userid, [FromForm] string Start, [FromForm] string End, [FromForm] string phoneNumber, [FromForm] string notice)
+        public IResult Book([FromForm] int roomNumber, [FromForm] string Userid, [FromForm] string FirstName, [FromForm] int totaldays, [FromForm] string LastName, [FromForm] string Start, [FromForm] string End, [FromForm] string phoneNumber, [FromForm] string notice)
         {
 
             string[] str = Start.ToString().Split('-');
@@ -100,7 +100,7 @@ namespace WebApplication_Atlantis.Controllers
             DateTime endday = new DateTime(Convert.ToInt32(str2[0]), Convert.ToInt32(str2[1]), Convert.ToInt32(str2[2]));
 
 
-            if (_unitOfWork.RoomRepository.booking(roomNumber, Userid, startday, endday, phoneNumber, notice))
+            if (_unitOfWork.RoomRepository.booking(roomNumber, Userid, FirstName, totaldays, LastName, startday, endday, phoneNumber, notice))
             {
                 _unitOfWork.Commit();
                 return Results.Ok();

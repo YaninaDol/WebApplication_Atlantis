@@ -54,7 +54,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<Atlantis20DbContext>()
     .AddDefaultTokenProviders();
 //cashe
-builder.Services.AddScoped<ICacheService, CacheService>();
+//builder.Services.AddScoped<ICacheService, CacheService>();
 //..
 builder.Services.AddAuthentication(options =>
 {

@@ -12,6 +12,8 @@ public partial class BookingInfo
     public DateTime? DateLast { get; set; }
 
     public int? RoomNumber { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
 
     public int? TotalDays { get; set; }
 
