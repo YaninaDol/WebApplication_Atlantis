@@ -11,6 +11,7 @@ namespace RepositoriesLibrary
     public interface ICategoryRep:IGenericRepository<Category>
     {
         bool DeleteCategory(int Id);
+        bool UpdateCategory(int id,string categoryName,string bedTypes);
 
         List<RoomSide> getRoomSides();
 

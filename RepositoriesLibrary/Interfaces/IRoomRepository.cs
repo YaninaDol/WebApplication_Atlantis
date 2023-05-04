@@ -11,9 +11,13 @@ namespace RepositoriesLibrary
     public interface IRoomRepository : IGenericRepository<Room>
     {
         IEnumerable<Room> getAllList();
+        IEnumerable<BookingInfo> getHistory();
         string getSide(int id);
 
         bool Update(int IdUpdate, Room item);
+
+        bool closeStatus(int Id);
+        bool paidStatus(int Id);
 
         IEnumerable<Room> Availability(DateTime Start, DateTime End,  int Adults, int Children);
 

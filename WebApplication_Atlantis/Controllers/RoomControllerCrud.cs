@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesLibrary.Interfaces;
 using RepositoriesLibrary.Models;
+using RepositoriesLibrary.Roles;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 
@@ -26,11 +27,12 @@ namespace WebApplication_Atlantis.Controllers
 
      
         [HttpPost]
+        [Authorize(Roles = UserRoles.Admin)]
         [Route("Add")]
      
-        public IResult Add(string Name, string Picture1, string Picture2, string Picture3, int Category, int Capacity, int Status, string Description, int Side, string Size, string Notice)
+        public IResult Add([FromForm] string Name, [FromForm] string Picture1, [FromForm] string Picture2, [FromForm] string Picture3, [FromForm] int Category, [FromForm] int Capacity, [FromForm] string Description, [FromForm] int Side, [FromForm] string Size, [FromForm] string Notice)
         {
-            _unitOfWork.RoomRepository.Create(new Room() { Name = Name, Picture1 = Picture1, Picture2 = Picture2, Picture3 = Picture3,Category=Category,Capacity=Capacity,Status=Status,Description=Description,Side=Side,Views= _unitOfWork.RoomRepository.getSide(Side), Size=Size,Notice=Notice });
+            _unitOfWork.RoomRepository.Create(new Room() { Name = Name, Picture1 = Picture1, Picture2 = Picture2, Picture3 = Picture3,Category=Category,Capacity=Capacity,Status=1,Description=Description,Side=Side,Views= _unitOfWork.RoomRepository.getSide(Side), Size=Size,Notice=Notice });
             _unitOfWork.Commit();
            
           //  _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
@@ -39,9 +41,10 @@ namespace WebApplication_Atlantis.Controllers
 
         }
         [HttpPost]
+        [Authorize(Roles = UserRoles.Admin)]
         [Route("Delete")]
 
-        public IResult Delete(int Id)
+        public IResult Delete([FromForm] int Id)
         {
             _unitOfWork.RoomRepository.Delete(Id);
             _unitOfWork.Commit();
@@ -53,12 +56,13 @@ namespace WebApplication_Atlantis.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = UserRoles.Admin)]
         [Route("Update")]
 
-        public IResult Update([FromForm] int Id, [FromForm] string Name, [FromForm] string Picture1, [FromForm] string Picture2, [FromForm] string Picture3, [FromForm] int Category, [FromForm] int Capacity, [FromForm] int Status, [FromForm] string Description, [FromForm] int Side, [FromForm] string Size, [FromForm] string Notice)
+        public IResult Update([FromForm] int Id, [FromForm] string Name, [FromForm] string Picture1, [FromForm] string Picture2, [FromForm] string Picture3, [FromForm] int Category, [FromForm] int Capacity, [FromForm] string Description, [FromForm] int Side, [FromForm] string Size, [FromForm] string Notice)
         {
 
-            if (_unitOfWork.RoomRepository.Update(Id, new Room() { Name = Name, Picture1 = Picture1, Picture2 = Picture2, Picture3 = Picture3, Category = Category, Capacity = Capacity, Status = Status, Description = Description, Side = Side, Size = Size, Notice = Notice }))
+            if (_unitOfWork.RoomRepository.Update(Id, new Room() { Name = Name, Picture1 = Picture1, Picture2 = Picture2, Picture3 = Picture3, Category = Category, Capacity = Capacity, Status = 1, Description = Description, Side = Side, Size = Size, Notice = Notice }))
             {
                 _unitOfWork.Commit();
 
@@ -109,7 +113,52 @@ namespace WebApplication_Atlantis.Controllers
 
         }
 
+        [HttpPost]
+        [Authorize(Roles = UserRoles.Admin)]
+        [Route("CloseStatus")]
 
+        public IResult CloseStatus([FromForm] int Id)
+        {
+            if (_unitOfWork.RoomRepository.closeStatus(Id) == true)
+            {
+                _unitOfWork.Commit();
+                return Results.Ok();
+            }
+            return Results.BadRequest();
+
+
+        }
+        [HttpPost]
+        [Authorize(Roles = UserRoles.Admin)]
+        [Route("PaidStatus")]
+
+        public IResult PaidStatus([FromForm] int Id)
+        {
+            if (_unitOfWork.RoomRepository.paidStatus(Id) == true)
+            {
+                _unitOfWork.Commit();
+                return Results.Ok();
+            }
+            return Results.BadRequest();
+
+
+        }
+
+        [HttpGet]
+        [Authorize(Roles = UserRoles.Admin)]
+        [Route("GetHistory")]
+
+        public async Task<ActionResult<IEnumerable<BookingInfo>>> GetHistory()
+        {
+            if (_unitOfWork.RoomRepository.getHistory().ToList().Count>0)
+            {
+                _unitOfWork.Commit();
+                return _unitOfWork.RoomRepository.getHistory().ToList();
+            }
+            return null;
+
+
+        }
 
     }
 }

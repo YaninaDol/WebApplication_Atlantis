@@ -128,6 +128,32 @@ namespace DataAccess
 
         }
 
+        public bool closeStatus(int Id)
+        {
+            if(db.BookingInfos.ToList().Any(x=>x.Id.Equals(Id))) 
+            
+            {
 
+                db.BookingInfos.ToList().Where((x) => x.Id.Equals(Id)).FirstOrDefault().Status = "closed";
+                return true;
+            }
+            return false;
+        }
+        public bool paidStatus(int Id)
+        {
+            if (db.BookingInfos.ToList().Any(x => x.Id.Equals(Id)))
+
+            {
+
+                db.BookingInfos.ToList().Where((x) => x.Id.Equals(Id)).FirstOrDefault().Status = "paid";
+                return true;
+            }
+            return false;
+        }
+
+        public IEnumerable<BookingInfo> getHistory()
+        {
+            return db.BookingInfos.ToList();
+         }
     }
 }

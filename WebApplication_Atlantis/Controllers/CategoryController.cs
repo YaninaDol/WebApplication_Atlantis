@@ -22,13 +22,13 @@ namespace WebApplication_Atlantis.Controllers
 
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
-        [Route("Add")]
-        public IResult Add(string categoryName)
+        [Route("AddCategory")]
+        public IResult AddCategory([FromForm] string categoryName, [FromForm] string bedTypes)
         {
             try
             {
 
-                _unitOfWork.CategoryRep.Create(new Category() { Name = categoryName });
+                _unitOfWork.CategoryRep.Create(new Category() { Name = categoryName,BedTypes=bedTypes });
                 _unitOfWork.Commit();
                 return Results.Ok();
 
@@ -37,15 +37,38 @@ namespace WebApplication_Atlantis.Controllers
 
         }
 
+
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
-        [Route("Delete")]
-        public IResult Delete(int id)
+        [Route("UpdateCategory")]
+        public IResult UpdateCategory([FromForm] int id, [FromForm] string categoryName, [FromForm] string bedTypes)
         {
             try
             {
-                if (_unitOfWork.CategoryRep.DeleteCategory(id))
+                if (_unitOfWork.CategoryRep.UpdateCategory(id, categoryName, bedTypes) == true)
 
+                {
+                    _unitOfWork.Commit();
+                    return Results.Ok();
+                }
+                else return Results.Ok("Bad request");
+
+
+            }
+            catch (Exception ex) { return Results.Ok(ex.Message); }
+
+        }
+
+
+
+        [HttpPost]
+      
+        [Route("Delete")]
+        public IResult Delete([FromForm] int id)
+        {
+            try
+            {
+                if (_unitOfWork.CategoryRep.DeleteCategory(id)==true)
                 {
                     _unitOfWork.Commit();
                     return Results.Ok();
