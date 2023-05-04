@@ -30,9 +30,9 @@ namespace WebApplication_Atlantis.Controllers
         [Authorize(Roles = UserRoles.Admin)]
         [Route("Add")]
      
-        public IResult Add([FromForm] string Name, [FromForm] string Picture1, [FromForm] string Picture2, [FromForm] string Picture3, [FromForm] int Category, [FromForm] int Capacity, [FromForm] string Description, [FromForm] int Side, [FromForm] string Size, [FromForm] string Notice)
+        public IResult Add([FromForm] string Name, [FromForm] string Picture1, [FromForm] string Picture2, [FromForm] string Picture3, [FromForm] int Category, [FromForm] int Capacity, [FromForm] string Description, [FromForm] int Side, [FromForm] string Size, [FromForm] string Notice, [FromForm] int Price)
         {
-            _unitOfWork.RoomRepository.Create(new Room() { Name = Name, Picture1 = Picture1, Picture2 = Picture2, Picture3 = Picture3,Category=Category,Capacity=Capacity,Status=1,Description=Description,Side=Side,Views= _unitOfWork.RoomRepository.getSide(Side), Size=Size,Notice=Notice });
+            _unitOfWork.RoomRepository.Create(new Room() { Name = Name, Picture1 = Picture1, Picture2 = Picture2, Picture3 = Picture3,Category=Category,Capacity=Capacity,Status=1,Description=Description,Side=Side,Views= _unitOfWork.RoomRepository.getSide(Side), Size=Size,Notice=Notice,Price=Price });
             _unitOfWork.Commit();
            
           //  _cacheService.SetData("Rooms", _unitOfWork.RoomRepository.GetAll(), DateTimeOffset.Now.AddDays(1));
