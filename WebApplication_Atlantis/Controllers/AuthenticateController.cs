@@ -31,9 +31,9 @@ namespace WebApplication_Atlantis.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login( Login model)
+        public async Task<IActionResult> Login(Login model)
         {
-           
+
             var user = await _userManager.FindByNameAsync(model.UserName);
             var d = _userManager.CheckPasswordAsync(user, model.Password);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -55,7 +55,7 @@ namespace WebApplication_Atlantis.Controllers
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo,
-                    userId=user.Id,
+                    userId = user.Id,
                     userRole
                 });
             }
@@ -65,7 +65,7 @@ namespace WebApplication_Atlantis.Controllers
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
         [Route("regUser")]
-        public async Task<IActionResult> RegUser( Register model)
+        public async Task<IActionResult> RegUser(Register model)
         {
             var userEx = await _userManager.FindByNameAsync(model.UserName);
             if (userEx != null) return StatusCode(StatusCodes.Status500InternalServerError, "User in db already");
@@ -88,7 +88,7 @@ namespace WebApplication_Atlantis.Controllers
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
         [Route("regAdmin")]
-       
+
         public async Task<IActionResult> RegAdmin([FromBody] Register model)
         {
             var userEx = await _userManager.FindByNameAsync(model.UserName);
@@ -111,7 +111,7 @@ namespace WebApplication_Atlantis.Controllers
 
 
             //Доступно только то, что авторизированно админу !
-            if(await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
                 await _userManager.AddToRoleAsync(user, UserRoles.Admin);
             // доступны методы и пользователей
             //if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
@@ -119,9 +119,11 @@ namespace WebApplication_Atlantis.Controllers
 
             return Ok("Admin added!");
         }
+
+
         [HttpPost]
         [Route("regMenager")]
-        [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = $"{UserRoles.Admin}")]
 
         public async Task<IActionResult> regMenager([FromBody] Register model)
         {

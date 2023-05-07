@@ -27,8 +27,7 @@ namespace WebApplication_Atlantis.Controllers
 
      
         [HttpPost]
-        [Authorize(Roles = UserRoles.Admin)]
-        [Authorize(Roles = UserRoles.Menager)]
+        [Authorize(Roles = $"{UserRoles.Menager},{UserRoles.Admin}")]
         [Route("Add")]
      
         public IResult Add([FromForm] string Name, [FromForm] string Picture1, [FromForm] string Picture2, [FromForm] string Picture3, [FromForm] int Category, [FromForm] int Capacity, [FromForm] string Description, [FromForm] int Side, [FromForm] string Size, [FromForm] string Notice, [FromForm] int Price)
@@ -42,8 +41,7 @@ namespace WebApplication_Atlantis.Controllers
 
         }
         [HttpPost]
-        [Authorize(Roles = UserRoles.Admin)]
-        [Authorize(Roles = UserRoles.Menager)]
+        [Authorize(Roles = $"{UserRoles.Menager},{UserRoles.Admin}")]
         [Route("Delete")]
 
         public IResult Delete([FromForm] int Id)
@@ -58,8 +56,7 @@ namespace WebApplication_Atlantis.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = UserRoles.Admin)]
-        [Authorize(Roles = UserRoles.Menager)]
+        [Authorize(Roles = $"{UserRoles.Menager},{UserRoles.Admin}")]
         [Route("Update")]
 
         public IResult Update([FromForm] int Id, [FromForm] string Name, [FromForm] string Picture1, [FromForm] string Picture2, [FromForm] string Picture3, [FromForm] int Category, [FromForm] int Capacity, [FromForm] string Description, [FromForm] int Side, [FromForm] string Size, [FromForm] string Notice)
@@ -117,8 +114,7 @@ namespace WebApplication_Atlantis.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = UserRoles.Admin)]
-        [Authorize(Roles = UserRoles.Menager)]
+        [Authorize(Roles = $"{UserRoles.Menager},{UserRoles.Admin}")]
         [Route("CloseStatus")]
 
         public IResult CloseStatus([FromForm] int Id)
@@ -133,8 +129,7 @@ namespace WebApplication_Atlantis.Controllers
 
         }
         [HttpPost]
-        [Authorize(Roles = UserRoles.Admin)]
-        [Authorize(Roles = UserRoles.Menager)]
+        [Authorize(Roles = $"{UserRoles.Menager},{UserRoles.Admin}")]
         [Route("PaidStatus")]
 
         public IResult PaidStatus([FromForm] int Id)
@@ -150,8 +145,7 @@ namespace WebApplication_Atlantis.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = UserRoles.Admin)]
-        [Authorize(Roles = UserRoles.Menager)]
+        [Authorize(Roles = $"{UserRoles.Menager},{UserRoles.Admin}")]
         [Route("GetHistory")]
 
         public async Task<ActionResult<IEnumerable<BookingInfo>>> GetHistory()
