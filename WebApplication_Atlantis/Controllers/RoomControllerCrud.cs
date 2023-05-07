@@ -28,6 +28,7 @@ namespace WebApplication_Atlantis.Controllers
      
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Menager)]
         [Route("Add")]
      
         public IResult Add([FromForm] string Name, [FromForm] string Picture1, [FromForm] string Picture2, [FromForm] string Picture3, [FromForm] int Category, [FromForm] int Capacity, [FromForm] string Description, [FromForm] int Side, [FromForm] string Size, [FromForm] string Notice, [FromForm] int Price)
@@ -42,6 +43,7 @@ namespace WebApplication_Atlantis.Controllers
         }
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Menager)]
         [Route("Delete")]
 
         public IResult Delete([FromForm] int Id)
@@ -57,6 +59,7 @@ namespace WebApplication_Atlantis.Controllers
 
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Menager)]
         [Route("Update")]
 
         public IResult Update([FromForm] int Id, [FromForm] string Name, [FromForm] string Picture1, [FromForm] string Picture2, [FromForm] string Picture3, [FromForm] int Category, [FromForm] int Capacity, [FromForm] string Description, [FromForm] int Side, [FromForm] string Size, [FromForm] string Notice)
@@ -115,6 +118,7 @@ namespace WebApplication_Atlantis.Controllers
 
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Menager)]
         [Route("CloseStatus")]
 
         public IResult CloseStatus([FromForm] int Id)
@@ -130,6 +134,7 @@ namespace WebApplication_Atlantis.Controllers
         }
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Menager)]
         [Route("PaidStatus")]
 
         public IResult PaidStatus([FromForm] int Id)
@@ -146,6 +151,7 @@ namespace WebApplication_Atlantis.Controllers
 
         [HttpGet]
         [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.Menager)]
         [Route("GetHistory")]
 
         public async Task<ActionResult<IEnumerable<BookingInfo>>> GetHistory()
@@ -157,6 +163,32 @@ namespace WebApplication_Atlantis.Controllers
             }
             return null;
 
+
+        }
+
+        [HttpGet]
+        [Route("GetRooms")]
+        public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
+        {
+
+
+
+            //List<Room> roomsCache = _cacheService.GetData<List<Room>>("Rooms");
+            //if (roomsCache == null)
+            //{
+            //    var roomsSQL =  _unitOfWork.RoomRepository.getAllList().ToList();
+            //    if (roomsSQL.Count > 0)
+            //    {
+            //        roomsCache = roomsSQL;
+            //        _cacheService.SetData("Rooms", roomsSQL, DateTimeOffset.Now.AddDays(1));
+
+
+
+            //    }
+            //}
+
+
+            return _unitOfWork.RoomRepository.GetAll().ToList();
 
         }
 

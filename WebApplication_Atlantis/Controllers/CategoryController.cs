@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace WebApplication_Atlantis.Controllers
 {
-    [ApiController,Authorize]
+    [ApiController, Authorize]
     [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
@@ -21,14 +21,14 @@ namespace WebApplication_Atlantis.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = $"{UserRoles.Menager},{UserRoles.Admin}")]
         [Route("AddCategory")]
         public IResult AddCategory([FromForm] string categoryName, [FromForm] string bedTypes)
         {
             try
             {
 
-                _unitOfWork.CategoryRep.Create(new Category() { Name = categoryName,BedTypes=bedTypes });
+                _unitOfWork.CategoryRep.Create(new Category() { Name = categoryName, BedTypes = bedTypes });
                 _unitOfWork.Commit();
                 return Results.Ok();
 
@@ -39,7 +39,7 @@ namespace WebApplication_Atlantis.Controllers
 
 
         [HttpPost]
-        [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = $"{UserRoles.Menager},{UserRoles.Admin}")]
         [Route("UpdateCategory")]
         public IResult UpdateCategory([FromForm] int id, [FromForm] string categoryName, [FromForm] string bedTypes)
         {
@@ -62,7 +62,7 @@ namespace WebApplication_Atlantis.Controllers
 
 
         [HttpPost]
-      
+        [Authorize(Roles = $"{UserRoles.Menager},{UserRoles.Admin}")]
         [Route("Delete")]
         public IResult Delete([FromForm] int id)
         {

@@ -63,6 +63,7 @@ namespace WebApplication_Atlantis.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = UserRoles.Admin)]
         [Route("regUser")]
         public async Task<IActionResult> RegUser( Register model)
         {
@@ -85,6 +86,7 @@ namespace WebApplication_Atlantis.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = UserRoles.Admin)]
         [Route("regAdmin")]
        
         public async Task<IActionResult> RegAdmin([FromBody] Register model)
@@ -116,6 +118,40 @@ namespace WebApplication_Atlantis.Controllers
             //    await _userManager.AddToRoleAsync(user, UserRoles.User);
 
             return Ok("Admin added!");
+        }
+        [HttpPost]
+        [Route("regMenager")]
+        [Authorize(Roles = UserRoles.Admin)]
+
+        public async Task<IActionResult> regMenager([FromBody] Register model)
+        {
+            var userEx = await _userManager.FindByNameAsync(model.UserName);
+            if (userEx != null) return StatusCode(StatusCodes.Status500InternalServerError, "Menager in db already");
+
+            IdentityUser user = new()
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+
+            var res = await _userManager.CreateAsync(user, model.Password);
+            if (!res.Succeeded) { return StatusCode(StatusCodes.Status500InternalServerError, "Creation failed!"); }
+
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Menager))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Menager));
+            if (!await _roleManager.RoleExistsAsync(UserRoles.Menager))
+                await _roleManager.CreateAsync(new IdentityRole(UserRoles.Menager));
+
+
+            //Доступно только то, что авторизированно админу !
+            if (await _roleManager.RoleExistsAsync(UserRoles.Menager))
+                await _userManager.AddToRoleAsync(user, UserRoles.Menager);
+            // доступны методы и пользователей
+            //if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
+            //    await _userManager.AddToRoleAsync(user, UserRoles.User);
+
+            return Ok("Menager added!");
         }
 
         [HttpPost]
@@ -171,7 +207,7 @@ namespace WebApplication_Atlantis.Controllers
         public async Task<IActionResult> getUsers()
         {
            
-                return Ok(_userManager.Users.ToList());
+                return Ok(_userManager.Users.ToList().Where(x=>x.UserName!="Adminadmin2").ToList());
            
 
         }
